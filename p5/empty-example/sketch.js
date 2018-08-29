@@ -69,12 +69,13 @@ class grid{
   }
   getRelevantNeighbours(tile){
     var tempArr = new Array();
-    
-    /*
+
     if (tile.getHovered() == true){
       for(var k = 0; k < 9; k++){
-        this.cells[k][tile.getCellPosY()].setCorrelated(true);
-        this.cells[tile.getCellPosX()][k].setCorrelated(true);
+        tempArr.push(this.cells[k][tile.getCellPosY()]);  //x row
+      }
+      for (var l = 0; l < 9; l++){
+        tempArr.push(this.cells[tile.getCellPosX()][l]);  //y row
       }
       
       var quadrantX = tile.getCellPosX() % 3;
@@ -87,29 +88,10 @@ class grid{
 
       for (var i = quadrantX; i < quadrantXMax; i++)
         for (var j = quadrantY; j < quadrantYMax; j++)
-          this.cells[i][j].setCorrelated(true);
-      
-    }
-    */
+          tempArr.push(this.cells[i][j]);                 //3x3 sector
 
-    if (tile.getHovered() == true){
-      for(var k = 0; k < 9; k++){
-        tempArr.push(this.cells[k][tile.getCellPosY()]);
-        tempArr.push(this.cells[tile.getCellPosX()][k]);
-      }
-      
-      var quadrantX = tile.getCellPosX() % 3;
-      quadrantX = tile.getCellPosX() - quadrantX;
-      var quadrantY = tile.getCellPosY() % 3;
-      quadrantY = tile.getCellPosY() - quadrantY;
 
-      var quadrantXMax = quadrantX + 3;
-      var quadrantYMax = quadrantY + 3;
-
-      for (var i = quadrantX; i < quadrantXMax; i++)
-        for (var j = quadrantY; j < quadrantYMax; j++)
-          tempArr.push(this.cells[i][j]);
-      
+      console.log(tempArr);
     }
 
     return tempArr;
@@ -123,24 +105,41 @@ class grid{
       }
   }
   createBoard(){
-    var tempNeighbours = new Array();
-    var startPosX = Math.floor(Math.random() * 9);
-    var startPosY = Math.floor(Math.random() * 9);
+    var tempNeighbours;
+    var startPosX = 4;
+    var startPosY = 4;
 
-    this.cells[startPosX][startPosY].setVal(Math.floor(Math.random() * 9));
-    tempNeighbours = getRelevantNeighbours(this.cells[startPosX][startPosY]);
+    this.cells[startPosX][startPosY].setVal(Math.floor(Math.random() * 9) + 1);
+    this.cells[startPosX][startPosY].setHovered(true);
+    tempNeighbours = this.getRelevantNeighbours(this.cells[startPosX][startPosY]);
+
+    console.log(tempNeighbours);
 
 
-    for (var i = 0; i < tempNeighbours.length; i++){
-      var randomCell = Math.floor(Math.random() * 27);
-      
-    }
+    for (var i = 0; i < 9; i++){
+      var exists = true;
 
-    for (var i = 0; i < 9; i++)
-      for (var j = 0; j < 9; j++)
+      while (exists == true)
       {
-        
+        exists = false;
+        var randCellVal = Math.floor(Math.random() * 9) + 1;
+        console.log(randCellVal);
+        for (var j = 0; j < 9; j++)
+        {
+          if (tempNeighbours[j].getCellVal() == randCellVal)
+            exists = true;
+          else{
+            this.cells[tempNeighbours[i].getCellPosX()][tempNeighbours[i].getCellPosY()].setVal(randCellVal);
+            exists = false;
+          }
+        }
       }
+
+      //this.cells[tempNeighbours[i].getCellPosX()][tempNeighbours[i].getCellPosY()].setVal();
+      //tempRowArr.push(cells[tempNeighbours[i].getCellPosX()][tempNeighbours[i].getCellPosY()])
+
+    }
+    
   }
 }
 
@@ -174,8 +173,6 @@ function mouseChecking(){
 
         for (var k = 0; k < temporaryBoundingArray.length; k++)
           temporaryBoundingArray[k].setCorrelated(true);
-
-        console.log(temporaryBoundingArray);
 
         if (mouseIsPressed)
           soduku.cells[i][j].incrementVal();
