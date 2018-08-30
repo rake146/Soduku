@@ -115,7 +115,30 @@ class grid{
 
     console.log(tempNeighbours);
 
+    var exists = true;
+    for (var i = 0; i < 9; i++){
+      for (var j = 0; j < 9; j++){
+        tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
 
+        console.log(tempNeighbours);
+        for (var k = 0; k < tempNeighbours.length; k++)
+        {
+          exists = true;
+          while (exists == true)
+          {
+            exists = false;
+            var randCellVal = Math.floor(Math.random() * 9) + 1;
+
+            if (tempNeighbours[k].getCellVal() == randCellVal)
+              exists = true;
+
+            if (exists == false)
+              this.cells[i][j].setVal(randCellVal); 
+          }
+        }
+      }
+    }
+    /*
     var exists = true;
     for (var h = 0; h < 3; h++){
       for (var i = 0 + (9 * h); i < 9 + (9 * h); i++){
@@ -135,8 +158,7 @@ class grid{
         }
       }
     }
-
-
+*/
   }
 }
 
