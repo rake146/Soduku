@@ -117,21 +117,27 @@ class grid{
     
 
     var exists = true;
-    for (var i = 0; i < 3; i++){
+    for (var i = 0; i < 9; i++){
       for (var j = 0; j < 9; j++){
 
         tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
 
+        console.log(tempNeighbours);
         var availableNumbers = [1, 2, 3, 4, 6, 7, 8, 9];
 
-        for (var k = 0; k < tempNeighbours.length; k++){
-          for (var l = 0; l < availableNumbers.length; l++){
+        for (var l = availableNumbers.length; l > 0; l--){
+          for (var k = 0; k < tempNeighbours.length; k++){
             if (tempNeighbours[k].getCellVal() == availableNumbers[l])
               availableNumbers.splice(l, 1);
+            
           }
-
-          this.cells[i][j].setVal(availableNumbers[(Math.random() * availableNumbers.length) + 1]); 
         }
+
+        console.log(availableNumbers);
+        console.log(availableNumbers.length);
+        var numpos = (Math.floor(Math.random() * availableNumbers.length));
+        this.cells[i][j].setVal(availableNumbers[numpos]); 
+        
         /*
         exists = true;
         while (exists == true)
