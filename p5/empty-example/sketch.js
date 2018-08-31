@@ -70,27 +70,26 @@ class grid{
   getRelevantNeighbours(tile){
     var tempArr = new Array();
 
-    if (tile.getHovered() == true){
-      for(var k = 0; k < 9; k++){
-        tempArr.push(this.cells[k][tile.getCellPosY()]);  //x row
-      }
-      for (var l = 0; l < 9; l++){
-        tempArr.push(this.cells[tile.getCellPosX()][l]);  //y row
-      }
-      
-      var quadrantX = tile.getCellPosX() % 3;
-      quadrantX = tile.getCellPosX() - quadrantX;
-      var quadrantY = tile.getCellPosY() % 3;
-      quadrantY = tile.getCellPosY() - quadrantY;
-
-      var quadrantXMax = quadrantX + 3;
-      var quadrantYMax = quadrantY + 3;
-
-      for (var i = quadrantX; i < quadrantXMax; i++)
-        for (var j = quadrantY; j < quadrantYMax; j++)
-          tempArr.push(this.cells[i][j]);                 //3x3 sector
+    for(var k = 0; k < 9; k++){
+      tempArr.push(this.cells[k][tile.getCellPosY()]);  //x row
     }
+    for (var l = 0; l < 9; l++){
+      tempArr.push(this.cells[tile.getCellPosX()][l]);  //y row
+    }
+    
+    var quadrantX = tile.getCellPosX() % 3;
+    quadrantX = tile.getCellPosX() - quadrantX;
+    var quadrantY = tile.getCellPosY() % 3;
+    quadrantY = tile.getCellPosY() - quadrantY;
 
+    var quadrantXMax = quadrantX + 3;
+    var quadrantYMax = quadrantY + 3;
+
+    
+    for (var i = quadrantX; i < quadrantXMax; i++)
+      for (var j = quadrantY; j < quadrantYMax; j++)
+        tempArr.push(this.cells[i][j]);                 //3x3 sector
+  
     return tempArr;
     
   }
@@ -110,19 +109,30 @@ class grid{
     this.cells[startPosX][startPosY].setVal(Math.floor(Math.random() * 9) + 1);
     this.cells[startPosX][startPosY].setHovered(true);
     */
-    //tempNeighbours = this.getRelevantNeighbours(this.cells[0][0]);
+
+    //this.cells[0][0].setVal(Math.floor(Math.random() * 9) + 1);
     //this.cells[0][0].setHovered(true);
+    //tempNeighbours = this.getRelevantNeighbours(this.cells[0][0]);
     //console.log(tempNeighbours);
     
 
     var exists = true;
-    for (var i = 0; i < 9; i++){
+    for (var i = 0; i < 3; i++){
       for (var j = 0; j < 9; j++){
-        //this.cells[i][j].setHovered(true);
-        tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
-        
-        console.log(tempNeighbours);
 
+        tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
+
+        var availableNumbers = [1, 2, 3, 4, 6, 7, 8, 9];
+
+        for (var k = 0; k < tempNeighbours.length; k++){
+          for (var l = 0; l < availableNumbers.length; l++){
+            if (tempNeighbours[k].getCellVal() == availableNumbers[l])
+              availableNumbers.splice(l, 1);
+          }
+
+          this.cells[i][j].setVal(availableNumbers[(Math.random() * availableNumbers.length) + 1]); 
+        }
+        /*
         exists = true;
         while (exists == true)
         {
@@ -138,30 +148,10 @@ class grid{
             this.cells[i][j].setVal(randCellVal); 
           
         }
-        this.cells[i][j].setHovered(false);
+        */
       }
     }
-    /*
-    var exists = true;
-    for (var h = 0; h < 3; h++){
-      for (var i = 0 + (9 * h); i < 9 + (9 * h); i++){
-        exists = true;
 
-        while (exists == true)
-        {
-          exists = false;
-          var randCellVal = Math.floor(Math.random() * 9) + 1;
-
-          for (var j = 0 + (9 * h); j < 9 + (9 * h); j++)
-            if (tempNeighbours[j].getCellVal() == randCellVal)
-              exists = true;
-
-          if (exists == false)
-            this.cells[tempNeighbours[i].getCellPosX()][tempNeighbours[i].getCellPosY()].setVal(randCellVal);
-        }
-      }
-    }
-*/
   }
 }
 
