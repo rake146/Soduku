@@ -12,8 +12,17 @@ class cell{
     this.val = 0;
     this.hovered = false;
     this.correlated = false;
+    this.previousCellVals = [];
   }
-
+  clearPreviousCells(){
+    this.previousCellVals = [];
+  }
+  addPeviousCell(){
+    this.previousCellVals.push(this.getCellVal());
+  }
+  getPreviousCellVals(){
+    return this.previousCellVals;
+  }
   getCellPosX(){
     return this.positionX;
   }
@@ -100,69 +109,80 @@ class grid{
         this.cells[i][j].setCorrelated(false);
       }
   }
+  //recursive fucntion
+  //backup if there are no valid options
+  //finsish successfully if there are avalid options and no remaining cells to mark
+  //continue if there are valid options and remaining cells to mark
+  /*
   createBoard(){
     var tempNeighbours;
-    /*
-    var startPosX = Math.floor(Math.random() * 9);
-    var startPosY = Math.floor(Math.random() * 9);
-
-    this.cells[startPosX][startPosY].setVal(Math.floor(Math.random() * 9) + 1);
-    this.cells[startPosX][startPosY].setHovered(true);
-    */
-
-    //this.cells[0][0].setVal(Math.floor(Math.random() * 9) + 1);
-    //this.cells[0][0].setHovered(true);
-    //tempNeighbours = this.getRelevantNeighbours(this.cells[0][0]);
-    //console.log(tempNeighbours);
-    
 
     var exists = true;
     for (var i = 0; i < 9; i++){
       for (var j = 0; j < 9; j++){
 
         tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
+        var availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-        console.log(tempNeighbours);
-        var availableNumbers = [1, 2, 3, 4, 6, 7, 8, 9];
-
-        for (var l = availableNumbers.length; l > 0; l--){
+        for (var l = availableNumbers.length; l >= 0; l--){
           for (var k = 0; k < tempNeighbours.length; k++){
-            if (tempNeighbours[k].getCellVal() == availableNumbers[l])
+            if (tempNeighbours[k].getCellVal() == availableNumbers[l]) 
               availableNumbers.splice(l, 1);
-            
           }
         }
-
-        console.log(availableNumbers);
-        console.log(availableNumbers.length);
+        
         var numpos = (Math.floor(Math.random() * availableNumbers.length));
         this.cells[i][j].setVal(availableNumbers[numpos]); 
-        
-        /*
-        exists = true;
-        while (exists == true)
-        {
-          exists = false;
-          var randCellVal = Math.floor(Math.random() * 9) + 1;
 
-          for (var k = 0; k < tempNeighbours.length; k++){
-            if (tempNeighbours[k].getCellVal() == randCellVal)
-              exists = true;
-          }
-
-          if (exists == false)
-            this.cells[i][j].setVal(randCellVal); 
-          
-        }
-        */
       }
     }
+  }
+  */
+  createBoard(currentPos){
+    var tempNeighbours;
+    var posX = Math.floor(currentPos / 9);
+    var posY = currentPos % 9;
+    
+    this.cells[posX][posY].setVal(0); 
+
+    tempNeighbours = this.getRelevantNeighbours(this.cells[posX][posY]);
+    var availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    //diff function with tempneighbours and available numbers should be used here
+    for (var l = availableNumbers.length; l >= 0; l--){
+      for (var k = 0; k < tempNeighbours.length; k++){
+        if (tempNeighbours[k].getCellVal() == availableNumbers[l]) 
+          availableNumbers.splice(l, 1);
+      }
+    }
+    //diff function with result with previouscell valls should be used here
+    for (var l = availableNumbers.length; l >= 0; l--){
+      for (var k = 0; k < this.cells[posX][posY].previousCellVals.length; k++){
+        if (this.cells[posX][posY].previousCellVals[k] == availableNumbers[l]) 
+          availableNumbers.splice(l, 1);
+      }
+    }
+
+    if (availableNumbers.length == 0)
+      this.createBoard(currentPos - 1);
+    
+    var numpos = (Math.floor(Math.random() * availableNumbers.length));
+
+    //if there are no positions left after this then we go back a cell, clear this cells previous
+
+    this.cells[posX][posY].setVal(availableNumbers[numpos]); 
+    this.cells[posX][posY].addPeviousCell();
+
+
+    //board complete therefore exit loop condition
+    if (currentPos < 81)
+      soduku.createBoard(currentPos + 1);
 
   }
 }
 
 var soduku = new grid();
-soduku.createBoard();
+soduku.createBoard(0);
 
 function setup() {
   // put setup code here
