@@ -142,12 +142,29 @@ class grid{
     var tempNeighbours;
     var posX = Math.floor(currentPos / 9);
     var posY = currentPos % 9;
-    
+    //console.log(posX, posY);
     this.cells[posX][posY].setVal(0); 
 
     tempNeighbours = this.getRelevantNeighbours(this.cells[posX][posY]);
+
     var availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+    let difference = availableNumbers.filter((x) => !tempNeighbours.includes(x.val));
+
+    console.log(difference);
+    /*
+    let difference = availableNumbers.filter((x) => !tempNeighbours.includes(x.val));
+
+    var tempb = [];
+
+    for(var i = 0; i < tempNeighbours.length; i++)
+      tempb.push(tempNeighbours[i].val);
+
+    //let difference2 = availableNumbers.filter((x) => !tempb.includes(x));
+
+    console.log(difference);
+
+    */
     //diff function with tempneighbours and available numbers should be used here
     for (var l = availableNumbers.length; l >= 0; l--){
       for (var k = 0; k < tempNeighbours.length; k++){
@@ -155,6 +172,8 @@ class grid{
           availableNumbers.splice(l, 1);
       }
     }
+
+
     //diff function with result with previouscell valls should be used here
     for (var l = availableNumbers.length; l >= 0; l--){
       for (var k = 0; k < this.cells[posX][posY].previousCellVals.length; k++){
@@ -163,19 +182,20 @@ class grid{
       }
     }
 
-    if (availableNumbers.length == 0)
+    if (availableNumbers.length == 0){
+      this.cells[posX][posY].clearPreviousCells();
       this.createBoard(currentPos - 1);
+    }
     
     var numpos = (Math.floor(Math.random() * availableNumbers.length));
 
     //if there are no positions left after this then we go back a cell, clear this cells previous
-
     this.cells[posX][posY].setVal(availableNumbers[numpos]); 
     this.cells[posX][posY].addPeviousCell();
 
 
     //board complete therefore exit loop condition
-    if (currentPos < 80)
+    if (currentPos < 81)
       soduku.createBoard(currentPos + 1);
 
   }
