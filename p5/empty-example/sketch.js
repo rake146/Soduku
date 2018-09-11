@@ -175,7 +175,7 @@ class grid{
 
 
     //board complete therefore exit loop condition
-    if (currentPos < 81)
+    if (currentPos < 80)
       soduku.createBoard(currentPos + 1);
 
   }
