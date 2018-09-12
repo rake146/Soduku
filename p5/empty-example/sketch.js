@@ -109,35 +109,61 @@ class grid{
         this.cells[i][j].setCorrelated(false);
       }
   }
-  //recursive fucntion
+
+  //creating a solvable board to check the algorithm -- debugging only
+  createFixedBoard(){
+    this.cells[0][0].setVal(4);
+    this.cells[0][4].setVal(6);
+    this.cells[0][8].setVal(2);
+
+    this.cells[1][0].setVal(1);
+    this.cells[1][2].setVal(2);
+    this.cells[1][3].setVal(3);
+    this.cells[1][8].setVal(8);
+
+    this.cells[2][1].setVal(3);
+    this.cells[2][5].setVal(9);
+    this.cells[2][6].setVal(6);
+    this.cells[2][8].setVal(4);
+
+    this.cells[3][2].setVal(3);
+    this.cells[3][3].setVal(6);
+    this.cells[3][4].setVal(5);
+    this.cells[3][6].setVal(2);
+    this.cells[3][7].setVal(4);
+
+    this.cells[4][0].setVal(6);
+    this.cells[4][1].setVal(8);
+    this.cells[4][2].setVal(7);
+    this.cells[4][5].setVal(2);
+
+    this.cells[5][1].setVal(5);
+    this.cells[5][3].setVal(9);
+    this.cells[5][4].setVal(1);
+    this.cells[5][7].setVal(6);
+
+    this.cells[6][2].setVal(5);
+    this.cells[6][3].setVal(2);
+    this.cells[6][6].setVal(7);
+    this.cells[6][7].setVal(8);
+    this.cells[6][8].setVal(1);
+
+    this.cells[7][0].setVal(7);
+    this.cells[7][3].setVal(5);
+    this.cells[7][6].setVal(4);
+    this.cells[7][8].setVal(9);
+
+    this.cells[8][1].setVal(9);
+    this.cells[8][2].setVal(1);
+    this.cells[8][5].setVal(3);
+    this.cells[8][6].setVal(5);
+    this.cells[8][8].setVal(6);
+  }
+
+  //recursive function
   //backup if there are no valid options
   //finsish successfully if there are avalid options and no remaining cells to mark
   //continue if there are valid options and remaining cells to mark
-  /*
-  createBoard(){
-    var tempNeighbours;
-
-    var exists = true;
-    for (var i = 0; i < 9; i++){
-      for (var j = 0; j < 9; j++){
-
-        tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
-        var availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-        for (var l = availableNumbers.length; l >= 0; l--){
-          for (var k = 0; k < tempNeighbours.length; k++){
-            if (tempNeighbours[k].getCellVal() == availableNumbers[l]) 
-              availableNumbers.splice(l, 1);
-          }
-        }
-        
-        var numpos = (Math.floor(Math.random() * availableNumbers.length));
-        this.cells[i][j].setVal(availableNumbers[numpos]); 
-
-      }
-    }
-  }
-  */
   createBoard(currentPos){
     var tempNeighbours;
     var posX = Math.floor(currentPos / 9);
@@ -199,10 +225,47 @@ class grid{
       soduku.createBoard(currentPos + 1);
 
   }
+
+  isGridStateSolvable(){
+     /////////////////
+    for (var i = 0; i < 9; i += 3)
+      for (var j = 0; j < 9; j += 3)
+      {
+        var tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
+      
+        var availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        var blankNumbers = [];
+
+        for (var l = availableNumbers.length; l >= 0; l--){
+          for (var k = 18; k < 27; k++){
+            if (tempNeighbours[k].getCellVal() == availableNumbers[l]) 
+              availableNumbers.splice(l, 1);
+          }
+        }
+
+        for (var k = 18; k < 27; k++){
+          if (tempNeighbours[k].getCellVal() == 0)
+            blankNumbers.push(tempNeighbours[k]);
+        }
+
+        var tempBlankCount = 0;
+
+        for (var i = 0; i < availableNumbers.length; i++){
+          for (var j = 0; j < blankNumbers.length; j++){
+            tempBlankCount++;
+          }
+        }
+        console.log(availableNumbers);
+        console.log(blankNumbers);
+      }
+
+  }
 }
 
 var soduku = new grid();
-soduku.createBoard(0);
+//soduku.createBoard(0);
+soduku.createFixedBoard();
+soduku.isGridStateSolvable();
 
 function setup() {
   // put setup code here
@@ -249,7 +312,8 @@ function valueChecking(){
   textAlign(CENTER, CENTER);
   for (var i = 0; i < 9; i++){
     for (var j = 0; j < 9; j++){
-      text(soduku.cells[i][j].getCellVal(), 50 + 20 + soduku.cells[i][j].getCellPosX() * 40, 50 + 20 + soduku.cells[i][j].getCellPosY() * 40);
+      if (soduku.cells[i][j].getCellVal() != 0)
+        text(soduku.cells[i][j].getCellVal(), 50 + 20 + soduku.cells[i][j].getCellPosX() * 40, 50 + 20 + soduku.cells[i][j].getCellPosY() * 40);
     }
   }
 }
