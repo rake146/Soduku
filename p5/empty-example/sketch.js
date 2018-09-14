@@ -102,6 +102,16 @@ class grid{
     return tempArr;
     
   }
+  contains(tile, num){
+    var tempNeighbours = this.getRelevantNeighbours(tile);
+
+    for (var i = 0; i < tempNeighbours.length; i++){
+      if (tempNeighbours[i].getCellVal() == num)
+        return true;
+    }
+
+    return false;
+  }
   clearFocus(){
     for (var i = 0; i < 9; i++)
       for (var j = 0; j < 9; j++){
@@ -228,6 +238,7 @@ class grid{
 
   isGridStateSolvable(){
      /////////////////
+    for (var o = 0; o < 1; o++)
     for (var i = 0; i < 9; i += 3)
       for (var j = 0; j < 9; j += 3)
       {
@@ -249,14 +260,31 @@ class grid{
         }
 
         var tempBlankCount = 0;
+        var savedEmptyPos = 0;
 
-        for (var i = 0; i < availableNumbers.length; i++){
-          for (var j = 0; j < blankNumbers.length; j++){
-            tempBlankCount++;
+        for (var m = 0; m < availableNumbers.length; m++){
+          //looping through the available blank spaces
+          for (var n = 0; n < blankNumbers.length; n++){
+            if (this.contains(blankNumbers[n], availableNumbers[m]) == true){
+              tempBlankCount++;
+            }
+            else
+              savedEmptyPos = n;
+          }
+        
+          if (i == 0 && j == 3){
+            console.log(availableNumbers, blankNumbers, tempBlankCount, blankNumbers.length);
+           }
+          
+          if (tempBlankCount == blankNumbers.length - 1){
+             this.cells[blankNumbers[savedEmptyPos].getCellPosX()][blankNumbers[savedEmptyPos].getCellPosY()].setVal(availableNumbers[m]); 
+             //availableNumbers[savedEmptyPos].setVal(availableNumbers[i]);
+             tempBlankCount = 0;
+             savedEmptyPos = 0;
           }
         }
-        console.log(availableNumbers);
-        console.log(blankNumbers);
+        //console.log(availableNumbers);
+        //console.log(blankNumbers);
       }
 
   }
