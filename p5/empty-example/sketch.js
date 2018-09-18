@@ -168,17 +168,19 @@ class grid{
     this.cells[8][5].setVal(3);
     this.cells[8][6].setVal(5);
     this.cells[8][8].setVal(6);
+    
   }
 
   //recursive function
   //backup if there are no valid options
   //finsish successfully if there are avalid options and no remaining cells to mark
   //continue if there are valid options and remaining cells to mark
-  createBoard(currentPos){
+  createBoard(currentPos, completed){
+    console.log(currentPos);
     var tempNeighbours;
     var posX = Math.floor(currentPos / 9);
     var posY = currentPos % 9;
-    //console.log(posX, posY);
+    console.log(posX, posY);
     this.cells[posX][posY].setVal(0); 
 
     tempNeighbours = this.getRelevantNeighbours(this.cells[posX][posY]);
@@ -218,9 +220,11 @@ class grid{
       }
     }
 
-    if (availableNumbers.length == 0){
+    if (completed == true)
+      console.log("hi");
+    if (availableNumbers.length == 0 && currentPos != 79 && completed == false){
       this.cells[posX][posY].clearPreviousCells();
-      this.createBoard(currentPos - 1);
+      this.createBoard(currentPos - 1, completed);
     }
     
     var numpos = (Math.floor(Math.random() * availableNumbers.length));
@@ -231,14 +235,18 @@ class grid{
 
 
     //board complete therefore exit loop condition
-    if (currentPos < 81)
-      soduku.createBoard(currentPos + 1);
-
+    if (currentPos < 80 && completed == false){
+      soduku.createBoard(currentPos + 1, completed);
+    }
+    else{
+      completed = true;
+      return 1;
+    }
   }
 
   isGridStateSolvable(){
      /////////////////
-    for (var o = 0; o < 1; o++)
+    for (var o = 0; o < 6; o++)
     for (var i = 0; i < 9; i += 3)
       for (var j = 0; j < 9; j += 3)
       {
@@ -279,21 +287,36 @@ class grid{
           if (tempBlankCount == blankNumbers.length - 1){
              this.cells[blankNumbers[savedEmptyPos].getCellPosX()][blankNumbers[savedEmptyPos].getCellPosY()].setVal(availableNumbers[m]); 
              //availableNumbers[savedEmptyPos].setVal(availableNumbers[i]);
-             tempBlankCount = 0;
-             savedEmptyPos = 0;
           }
+          tempBlankCount = 0;
+          savedEmptyPos = 0;
+
         }
         //console.log(availableNumbers);
         //console.log(blankNumbers);
       }
 
+      for (var i = 0; i < 9; i++)
+        for (var j = 0; j < 9; j++){
+          if (this.cells[i][j].getCellVal() == 0)
+            return false;
+        }
+
+
+      return true;
+  }
+
+  removeRandomCell(){
+
   }
 }
 
+
 var soduku = new grid();
-//soduku.createBoard(0);
-soduku.createFixedBoard();
-soduku.isGridStateSolvable();
+var val = soduku.createBoard(0, false);
+//soduku.createFixedBoard();
+var gridSolvable = soduku.isGridStateSolvable();
+console.log(gridSolvable);
 
 function setup() {
   // put setup code here
