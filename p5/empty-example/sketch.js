@@ -249,7 +249,7 @@ class grid{
     for (var i = 0; i < 9; i += 3)
       for (var j = 0; j < 9; j += 3)
       {
-        var tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
+        var tempNeighbours = this.getRelevantNeighbours(gridCopy[i][j]);
       
         var availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         var blankNumbers = [];
@@ -284,7 +284,7 @@ class grid{
            }
           
           if (tempBlankCount == blankNumbers.length - 1){
-             this.cells[blankNumbers[savedEmptyPos].getCellPosX()][blankNumbers[savedEmptyPos].getCellPosY()].setVal(availableNumbers[m]); 
+            gridCopy[blankNumbers[savedEmptyPos].getCellPosX()][blankNumbers[savedEmptyPos].getCellPosY()].setVal(availableNumbers[m]); 
              //availableNumbers[savedEmptyPos].setVal(availableNumbers[i]);
           }
           tempBlankCount = 0;
@@ -297,7 +297,7 @@ class grid{
 
       for (var i = 0; i < 9; i++)
         for (var j = 0; j < 9; j++){
-          if (this.cells[i][j].getCellVal() == 0)
+          if (gridCopy[i][j].getCellVal() == 0)
             return false;
         }
 
