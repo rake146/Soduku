@@ -176,11 +176,11 @@ class grid{
   //finsish successfully if there are avalid options and no remaining cells to mark
   //continue if there are valid options and remaining cells to mark
   createBoard(currentPos, completed){
-    console.log(currentPos);
+    //console.log(currentPos);
     var tempNeighbours;
     var posX = Math.floor(currentPos / 9);
     var posY = currentPos % 9;
-    console.log(posX, posY);
+    //console.log(posX, posY);
     this.cells[posX][posY].setVal(0); 
 
     tempNeighbours = this.getRelevantNeighbours(this.cells[posX][posY]);
@@ -189,7 +189,7 @@ class grid{
 
     let difference = availableNumbers.filter((x) => !tempNeighbours.includes(x.val));
 
-    console.log(difference);
+    //console.log(difference);
     /*
     let difference = availableNumbers.filter((x) => !tempNeighbours.includes(x.val));
 
@@ -220,11 +220,10 @@ class grid{
       }
     }
 
-    if (completed == true)
-      console.log("hi");
-    if (availableNumbers.length == 0 && currentPos != 79 && completed == false){
+    console.log(currentPos);
+    if (availableNumbers.length == 0 && currentPos <= 78){
       this.cells[posX][posY].clearPreviousCells();
-      this.createBoard(currentPos - 1, completed);
+      return this.createBoard(currentPos - 1, completed);
     }
     
     var numpos = (Math.floor(Math.random() * availableNumbers.length));
@@ -235,16 +234,16 @@ class grid{
 
 
     //board complete therefore exit loop condition
-    if (currentPos < 80 && completed == false){
-      soduku.createBoard(currentPos + 1, completed);
+    if (currentPos >= 80){
+      return true;
     }
     else{
-      completed = true;
-      return 1;
+      return soduku.createBoard(currentPos + 1, completed);
     }
   }
 
   isGridStateSolvable(){
+    var gridCopy = this.cells;
      /////////////////
     for (var o = 0; o < 6; o++)
     for (var i = 0; i < 9; i += 3)
@@ -307,7 +306,10 @@ class grid{
   }
 
   removeRandomCell(){
+      var randX = (Math.floor(Math.random() * 9));
+      var randY = (Math.floor(Math.random() * 9));
 
+      this.cells[randX][randY].setVal(0);
   }
 }
 
@@ -315,7 +317,11 @@ class grid{
 var soduku = new grid();
 var val = soduku.createBoard(0, false);
 //soduku.createFixedBoard();
-var gridSolvable = soduku.isGridStateSolvable();
+
+while (soduku.isGridStateSolvable() == true)
+  soduku.removeRandomCell();
+
+//var gridSolvable = soduku.isGridStateSolvable();
 console.log(gridSolvable);
 
 function setup() {
