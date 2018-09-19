@@ -243,13 +243,12 @@ class grid{
   }
 
   isGridStateSolvable(){
-    var gridCopy = this.cells;
      /////////////////
     for (var o = 0; o < 6; o++)
     for (var i = 0; i < 9; i += 3)
       for (var j = 0; j < 9; j += 3)
       {
-        var tempNeighbours = this.getRelevantNeighbours(gridCopy[i][j]);
+        var tempNeighbours = this.getRelevantNeighbours(this.cells[i][j]);
       
         var availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         var blankNumbers = [];
@@ -278,29 +277,22 @@ class grid{
             else
               savedEmptyPos = n;
           }
-        
-          if (i == 0 && j == 3){
-            console.log(availableNumbers, blankNumbers, tempBlankCount, blankNumbers.length);
-           }
           
-          if (tempBlankCount == blankNumbers.length - 1){
-            gridCopy[blankNumbers[savedEmptyPos].getCellPosX()][blankNumbers[savedEmptyPos].getCellPosY()].setVal(availableNumbers[m]); 
-             //availableNumbers[savedEmptyPos].setVal(availableNumbers[i]);
-          }
+          if (tempBlankCount == blankNumbers.length - 1)
+          this.cells[blankNumbers[savedEmptyPos].getCellPosX()][blankNumbers[savedEmptyPos].getCellPosY()].setVal(availableNumbers[m]); 
+          
           tempBlankCount = 0;
           savedEmptyPos = 0;
 
         }
-        //console.log(availableNumbers);
-        //console.log(blankNumbers);
       }
 
+      console.log(this);
       for (var i = 0; i < 9; i++)
-        for (var j = 0; j < 9; j++){
-          if (gridCopy[i][j].getCellVal() == 0)
-            return false;
-        }
-
+        for (var j = 0; j < 9; j++)
+          if (this.cells[i][j].getCellVal() == 0)
+             return false;
+          
 
       return true;
   }
@@ -310,19 +302,23 @@ class grid{
       var randY = (Math.floor(Math.random() * 9));
 
       this.cells[randX][randY].setVal(0);
+
+      console.log(this.cells[randX][randY]);
   }
 }
 
 
 var soduku = new grid();
 var val = soduku.createBoard(0, false);
-//soduku.createFixedBoard();
 
-while (soduku.isGridStateSolvable() == true)
-  soduku.removeRandomCell();
+soduku.removeRandomCell();
 
-//var gridSolvable = soduku.isGridStateSolvable();
-console.log(gridSolvable);
+console.log(soduku);
+var tempSoduku = soduku;
+
+tempSoduku.removeRandomCell();
+
+console.log(soduku);
 
 function setup() {
   // put setup code here
@@ -333,7 +329,7 @@ function setup() {
 function draw() {
   clear();
   // put drawing code here
-  drawGrid(); 
+  drawGrid();
   valueChecking();
   mouseChecking();
 }
