@@ -76,6 +76,7 @@ class grid{
       for (var j = 0; j < 9; j++)
         this.cells[i][j] = new cell(i, j);
   }
+
   getRelevantNeighbours(tile){
     var tempArr = new Array();
 
@@ -234,12 +235,29 @@ class grid{
 
 
     //board complete therefore exit loop condition
-    if (currentPos >= 80){
+    if (currentPos == 80){
       return true;
     }
     else{
       return soduku.createBoard(currentPos + 1, completed);
     }
+  }
+
+  copyGridState(copiedGrid){
+    for (var i = 0; i < 9; i++)
+        for (var j = 0; j < 9; j++){
+          this.cells[i][j].hovered = copiedGrid.cells[i][j].hovered;
+          this.cells[i][j].correlated = copiedGrid.cells[i][j].correlated;
+          this.cells[i][j].previousCellVals = copiedGrid.cells[i][j].previousCellVals;
+          this.cells[i][j].setVal(copiedGrid.cells[i][j].getCellVal());
+
+          /*
+          copiedGrid.cells[i][j].hovered = this.cells[i][j].hovered;
+          copiedGrid.cells[i][j].correlated = this.cells[i][j].correlated;
+          copiedGrid.cells[i][j].previousCellVals = this.cells[i][j].previousCellVals;
+          copiedGrid.cells[i][j].setVal(this.cells[i][j].getCellVal);
+          */
+        }
   }
 
   isGridStateSolvable(){
@@ -279,7 +297,7 @@ class grid{
           }
           
           if (tempBlankCount == blankNumbers.length - 1)
-          this.cells[blankNumbers[savedEmptyPos].getCellPosX()][blankNumbers[savedEmptyPos].getCellPosY()].setVal(availableNumbers[m]); 
+            this.cells[blankNumbers[savedEmptyPos].getCellPosX()][blankNumbers[savedEmptyPos].getCellPosY()].setVal(availableNumbers[m]); 
           
           tempBlankCount = 0;
           savedEmptyPos = 0;
@@ -287,7 +305,7 @@ class grid{
         }
       }
 
-      console.log(this);
+      console.log(soduku);
       for (var i = 0; i < 9; i++)
         for (var j = 0; j < 9; j++)
           if (this.cells[i][j].getCellVal() == 0)
@@ -296,29 +314,72 @@ class grid{
 
       return true;
   }
-
+  clear(){
+    for (var i = 0; i < 9; i++)
+        for (var j = 0; j < 9; j++){
+          this.cells[i][j].setVal(0);
+          this.cells[i][j].hovered = false;
+          this.cells[i][j].correlated = false;
+          this.cells[i][j].clearPreviousCells();
+        }
+  }
+  clearSubProperties(){
+    for (var i = 0; i < 9; i++)
+        for (var j = 0; j < 9; j++){
+          this.cells[i][j].hovered = false;
+          this.cells[i][j].correlated = false;
+          this.cells[i][j].clearPreviousCells();
+          
+        }
+  }
   removeRandomCell(){
       var randX = (Math.floor(Math.random() * 9));
       var randY = (Math.floor(Math.random() * 9));
 
       this.cells[randX][randY].setVal(0);
+      this.cells[randX][randY].hovered = false;
+      this.cells[randX][randY].correlated = false;
+      this.cells[randX][randY].clearPreviousCells();
 
-      console.log(this.cells[randX][randY]);
+      //console.log(this.cells[randX][randY]);
   }
 }
 
 
 var soduku = new grid();
-var val = soduku.createBoard(0, false);
+soduku.createBoard(0, false);
 
-soduku.removeRandomCell();
+/*
+for (var i = 0; i < 50; i++)
+  soduku.removeRandomCell();
+*/
 
-console.log(soduku);
-var tempSoduku = soduku;
+do{
+  soduku.removeRandomCell();
+  soduku2 = new grid();
+  soduku2.copyGridState(soduku);
 
-tempSoduku.removeRandomCell();
+}while(soduku2.isGridStateSolvable() == true)
 
-console.log(soduku);
+//soduku2 = new grid();
+
+//soduku.copyGridState(soduku2);
+//soduku2.copyGridState(soduku);
+//console.log(soduku2);
+
+//var soduku2 = clone(soduku);
+
+//var soduku2 = new grid();
+//soduku2.createBoard(0, false);
+
+//console.log("hello");
+//console.log(soduku.isGridStateSolvable());
+console.log(soduku2.isGridStateSolvable());
+
+//console.log(soduku);
+//var tempSoduku = soduku;
+
+//tempSoduku.removeRandomCell();
 
 function setup() {
   // put setup code here
@@ -333,7 +394,17 @@ function draw() {
   valueChecking();
   mouseChecking();
 }
+function clone(obj){
 
+  if (null == obj || "object" != typeof obj) return obj;
+  var copy = new grid();
+  for (var attr in obj) {
+      if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+  }
+  return copy;
+
+  //return copy;
+}
 function mouseChecking(){
 
   var temporaryBoundingArray = new Array();
@@ -400,3 +471,33 @@ function drawGrid() {
   }
   
 }
+
+if(document.readyState === "complete") {
+  btn = document.getElementById("somebutton");
+
+  btn.onclick = function setup() {
+    soduku.clear();
+    soduku.createBoard(0, false);
+  }
+}
+
+var script = document.createElement('script');
+script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
+script.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(script);
+
+
+document.addEventListener("DOMContentLoaded", function(event) {
+  console.log("DOM fully loaded and parsed");
+  btn = document.getElementById("somebutton");
+
+  btn.onclick = function setup() {
+    soduku.clear();
+    soduku.createBoard(0, false);
+  }
+});
+
+/*
+function setup(){
+    var disval = soduku.createBoard(0, false);
+}*/
