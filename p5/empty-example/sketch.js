@@ -2,12 +2,6 @@
 var soduku = new grid();
 soduku.createBoard(0, false);
 
-/*
-for (var i = 0; i < 50; i++)
-  soduku.removeRandomCell();
-*/
-
-
 do{
   soduku.removeRandomCell();
   soduku2 = new grid();
@@ -25,27 +19,8 @@ do{
 }while(soduku2.isGridStateSolvable() == false)
 */
 
-//soduku2.isGridStateSolvable();
-
-//soduku2 = new grid();
-
-//soduku.copyGridState(soduku2);
-//soduku2.copyGridState(soduku);
-//console.log(soduku2);
-
-//var soduku2 = clone(soduku);
-
-//var soduku2 = new grid();
-//soduku2.createBoard(0, false);
-
-//console.log("hello");
-//console.log(soduku.isGridStateSolvable());
 console.log(soduku2.isGridStateSolvable());
 
-//console.log(soduku);
-//var tempSoduku = soduku;
-
-//tempSoduku.removeRandomCell();
 
 function setup() {
   // put setup code here
@@ -86,10 +61,16 @@ function mouseChecking(){
           temporaryBoundingArray[k].setCorrelated(true);
 
         if (mouseIsPressed)
+        {
+          soduku.cells[i][j].setFocused(true);
           soduku.cells[i][j].incrementVal();
+        }
       }
-      else
+      else{
         soduku.cells[i][j].setHovered(false);
+        soduku.cells[i][j].setFocused(false);
+      }
+        
       
       //soduku.getRelevantNeighbours(soduku.cells[i][j]);
     }

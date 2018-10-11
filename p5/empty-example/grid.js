@@ -182,13 +182,6 @@ class grid{
             this.cells[i][j].correlated = copiedGrid.cells[i][j].correlated;
             this.cells[i][j].previousCellVals = copiedGrid.cells[i][j].previousCellVals;
             this.cells[i][j].setVal(copiedGrid.cells[i][j].getCellVal());
-  
-            /*
-            copiedGrid.cells[i][j].hovered = this.cells[i][j].hovered;
-            copiedGrid.cells[i][j].correlated = this.cells[i][j].correlated;
-            copiedGrid.cells[i][j].previousCellVals = this.cells[i][j].previousCellVals;
-            copiedGrid.cells[i][j].setVal(this.cells[i][j].getCellVal);
-            */
           }
     }
   
