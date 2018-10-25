@@ -177,11 +177,10 @@ class grid{
   //finsish successfully if there are avalid options and no remaining cells to mark
   //continue if there are valid options and remaining cells to mark
   createBoard(currentPos, completed){
-    //console.log(currentPos);
     var tempNeighbours;
     var posX = Math.floor(currentPos / 9);
     var posY = currentPos % 9;
-    //console.log(posX, posY);
+
     this.cells[posX][posY].setVal(0); 
 
     tempNeighbours = this.getRelevantNeighbours(this.cells[posX][posY]);
@@ -250,13 +249,6 @@ class grid{
           this.cells[i][j].correlated = copiedGrid.cells[i][j].correlated;
           this.cells[i][j].previousCellVals = copiedGrid.cells[i][j].previousCellVals;
           this.cells[i][j].setVal(copiedGrid.cells[i][j].getCellVal());
-
-          /*
-          copiedGrid.cells[i][j].hovered = this.cells[i][j].hovered;
-          copiedGrid.cells[i][j].correlated = this.cells[i][j].correlated;
-          copiedGrid.cells[i][j].previousCellVals = this.cells[i][j].previousCellVals;
-          copiedGrid.cells[i][j].setVal(this.cells[i][j].getCellVal);
-          */
         }
   }
 
@@ -305,7 +297,6 @@ class grid{
         }
       }
 
-      console.log(soduku);
       for (var i = 0; i < 9; i++)
         for (var j = 0; j < 9; j++)
           if (this.cells[i][j].getCellVal() == 0)
@@ -332,6 +323,7 @@ class grid{
           
         }
   }
+  /*
   removeRandomCell(){
       var randX = (Math.floor(Math.random() * 9));
       var randY = (Math.floor(Math.random() * 9));
@@ -340,46 +332,52 @@ class grid{
       this.cells[randX][randY].hovered = false;
       this.cells[randX][randY].correlated = false;
       this.cells[randX][randY].clearPreviousCells();
+  }*/
 
-      //console.log(this.cells[randX][randY]);
+  removeUnwantedCell(i, j){
+      this.cells[i][j].setVal(0);
+      this.cells[i][j].hovered = false;
+      this.cells[i][j].correlated = false;
+      this.cells[i][j].clearPreviousCells();
   }
+  createRandomListOrderOfCells(){
+    var array = [];
+
+    for (var i = 0; i < 9; i++){
+        for (var j = 0; j < 9; j++){
+          array.push(this.cells[i][j])
+        }
+    }
+
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+
 }
 
 
 var soduku = new grid();
 soduku.createBoard(0, false);
 
-/*
-for (var i = 0; i < 50; i++)
-  soduku.removeRandomCell();
-*/
+generateIncompleteGrid(soduku);
 
-do{
-  soduku.removeRandomCell();
-  soduku2 = new grid();
-  soduku2.copyGridState(soduku);
 
-}while(soduku2.isGridStateSolvable() == true)
 
-//soduku2 = new grid();
-
-//soduku.copyGridState(soduku2);
-//soduku2.copyGridState(soduku);
-//console.log(soduku2);
-
-//var soduku2 = clone(soduku);
-
-//var soduku2 = new grid();
-//soduku2.createBoard(0, false);
-
-//console.log("hello");
-//console.log(soduku.isGridStateSolvable());
-console.log(soduku2.isGridStateSolvable());
-
-//console.log(soduku);
-//var tempSoduku = soduku;
-
-//tempSoduku.removeRandomCell();
 
 function setup() {
   // put setup code here
@@ -394,6 +392,20 @@ function draw() {
   valueChecking();
   mouseChecking();
 }
+
+function generateIncompleteGrid(soduku){
+  var randomlyAssortedCellList = soduku.createRandomListOrderOfCells();
+
+  for (var i = 0; i < randomlyAssortedCellList.length; i++)
+  {
+      soduku2 = new grid();
+      soduku2.copyGridState(soduku);
+      soduku2.removeUnwantedCell(randomlyAssortedCellList[i].getCellPosX(), randomlyAssortedCellList[i].getCellPosY());
+      if (soduku2.isGridStateSolvable() == true)
+        soduku.removeUnwantedCell(randomlyAssortedCellList[i].getCellPosX(), randomlyAssortedCellList[i].getCellPosY());
+  }
+}
+
 function clone(obj){
 
   if (null == obj || "object" != typeof obj) return obj;
@@ -403,7 +415,6 @@ function clone(obj){
   }
   return copy;
 
-  //return copy;
 }
 function mouseChecking(){
 
@@ -490,14 +501,17 @@ document.getElementsByTagName('head')[0].appendChild(script);
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
   btn = document.getElementById("somebutton");
+  btnEasy = document.getElementById("somebuttonEasy");
 
   btn.onclick = function setup() {
     soduku.clear();
     soduku.createBoard(0, false);
   }
-});
 
-/*
-function setup(){
-    var disval = soduku.createBoard(0, false);
-}*/
+  btnEasy.onclick = function setup(){
+    soduku.clear();
+    soduku.createBoard(0, false);
+
+    generateIncompleteGrid(soduku);
+  }
+});
