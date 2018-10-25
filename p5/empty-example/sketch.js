@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class cell{ 
   constructor(positionX, positionY){
     this.positionX = positionX;
@@ -348,9 +349,12 @@ class grid{
           array.push(this.cells[i][j])
         }
     }
+=======
+>>>>>>> origin/master
 
     var currentIndex = array.length, temporaryValue, randomIndex;
 
+<<<<<<< HEAD
     //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
@@ -358,6 +362,12 @@ class grid{
       // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
+=======
+do{
+  soduku.removeRandomCell();
+  soduku2 = new grid();
+  soduku2.copyGridState(soduku);
+>>>>>>> origin/master
 
       // And swap it with the current element.
       temporaryValue = array[currentIndex];
@@ -365,6 +375,7 @@ class grid{
       array[randomIndex] = temporaryValue;
     }
 
+<<<<<<< HEAD
     return array;
   }
 
@@ -378,6 +389,20 @@ generateIncompleteGrid(soduku);
 
 
 
+=======
+
+/*
+do{
+  soduku.addRandomCell();
+  soduku2 = new grid();
+  soduku2.copyGridState(soduku);
+
+}while(soduku2.isGridStateSolvable() == false)
+*/
+
+console.log(soduku2.isGridStateSolvable());
+
+>>>>>>> origin/master
 
 function setup() {
   // put setup code here
@@ -431,10 +456,16 @@ function mouseChecking(){
           temporaryBoundingArray[k].setCorrelated(true);
 
         if (mouseIsPressed)
+        {
+          soduku.cells[i][j].setFocused(true);
           soduku.cells[i][j].incrementVal();
+        }
       }
-      else
+      else{
         soduku.cells[i][j].setHovered(false);
+        soduku.cells[i][j].setFocused(false);
+      }
+        
       
       //soduku.getRelevantNeighbours(soduku.cells[i][j]);
     }
@@ -483,15 +514,6 @@ function drawGrid() {
   
 }
 
-if(document.readyState === "complete") {
-  btn = document.getElementById("somebutton");
-
-  btn.onclick = function setup() {
-    soduku.clear();
-    soduku.createBoard(0, false);
-  }
-}
-
 var script = document.createElement('script');
 script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
 script.type = 'text/javascript';
@@ -507,6 +529,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     soduku.clear();
     soduku.createBoard(0, false);
   }
+<<<<<<< HEAD
+=======
+
+  /*
+  btn2 = document.getElementById("solveGridButton");
+
+  btn2.onclick = function setup(){
+    soduku.solveBoard(0, false);
+    console.log("hello");
+  }
+  */
+});
+>>>>>>> origin/master
 
   btnEasy.onclick = function setup(){
     soduku.clear();
