@@ -50,7 +50,7 @@ class cell{
     setVal(value){
       this.val = value;
     }
-    drawSquare(){
+    drawSquare(darkMode){
       strokeWeight(1);
       if (this.hovered == true)
         fill(color('rgba(140, 176, 234, 0.9)'));
@@ -58,8 +58,13 @@ class cell{
         fill(color('rgba(80, 180, 225, 0.4)'));
       else if (this.focused == true)
         fill(color('rgba(244, 66, 80, 0.4)'));
-      else
-        fill(color(255,255,255));
+      else{
+        if (darkMode == true){
+          fill(color(44,44,44));
+        }else{
+          fill(color(255,255,255));
+        }
+      }
   
       rect(50 + this.positionX * 40, 50 + this.positionY * 40, 40, 40);
     }
@@ -74,5 +79,11 @@ class cell{
     }
     setFocused(focusBool){
       this.focused = focusBool;
+    }
+    setPermanent(permanentBool){
+      this.permanent = permanentBool;
+    }
+    getPermanent(){
+      return this.permanent;
     }
   }

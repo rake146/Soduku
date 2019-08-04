@@ -26,6 +26,12 @@ function draw() {
 function generateIncompleteGrid(soduku){
   var randomlyAssortedCellList = soduku.createRandomListOrderOfCells();
 
+  // randomly sort the cells
+  // go through the cell list, removing each one
+  // copy the grid state, remove the copy
+  // if solvable is true on copy
+  // remove it on main
+
   for (var i = 0; i < randomlyAssortedCellList.length; i++)
   {
       soduku2 = new grid();
@@ -34,6 +40,18 @@ function generateIncompleteGrid(soduku){
       if (soduku2.isGridStateSolvable() == true)
         soduku.removeUnwantedCell(randomlyAssortedCellList[i].getCellPosX(), randomlyAssortedCellList[i].getCellPosY());
   }
+
+  for (var i = 0; i < 9; i++){
+    for (var j = 0; j < 9; j++){
+      if (soduku.cells[i][j].getCellVal() != 0){
+        soduku.cells[i][j].setPermanent(true);
+      }
+      else{
+        soduku.cells[i][j].setPermanent(false);
+      }
+    }
+}
+
 }
 
 function clone(obj){
@@ -83,23 +101,41 @@ function valueChecking(){
   textAlign(CENTER, CENTER);
   for (var i = 0; i < 9; i++){
     for (var j = 0; j < 9; j++){
-      if (soduku.cells[i][j].getCellVal() != 0)
+      if (soduku.cells[i][j].getCellVal() != 0){
+        if (soduku.cells[i][j].getPermanent() == true){
+          textSize(24);
+        }
+        else{
+          textSize(18);
+        }
         text(soduku.cells[i][j].getCellVal(), 50 + 20 + soduku.cells[i][j].getCellPosX() * 40, 50 + 20 + soduku.cells[i][j].getCellPosY() * 40);
+      }
     }
   }
 }
 
 function drawGrid() {
   var maxRows = 9;
+
+  console.log(soduku.getDarkMode());
   
   for (var i = 0; i < 9; i++){
     for (var j = 0; j < 9; j++){
-      soduku.cells[i][j].drawSquare();
+      soduku.cells[i][j].drawSquare(soduku.getDarkMode());
     }
   }
-  
+
+  if (soduku.getDarkMode() == true){
+    fill(color(255,255,255));
+    //maybe remove this later?
+    stroke(214, 214, 214);
+  }else{
+    //console.log("FILLING");
+    fill(color(0,0,0));
+  }
+
+  //fill(color(0,0,0))
   for (var i = 0; i < maxRows + 1; i++){
-    fill(color(0,0,0))
 
     if (i == 0 || i == maxRows){  // outline for grid
       strokeWeight(3);
@@ -116,6 +152,9 @@ function drawGrid() {
     line(50 + i * 40, 50, 50 + i * 40, 50 + 40 * maxRows);
     
   }
+
+  strokeWeight(0);
+  stroke(0, 0, 0);
   
 }
 

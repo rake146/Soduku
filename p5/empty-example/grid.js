@@ -7,6 +7,16 @@ class grid{
     for (var i = 0; i < 9; i++)
       for (var j = 0; j < 9; j++)
         this.cells[i][j] = new cell(i, j);
+
+    this.darkMode = true;
+  }
+
+  getDarkMode(){
+    return this.darkMode;
+  }
+
+  setDarkMode(mode){
+    this.darkMode = mode;
   }
 
   getRelevantNeighbours(tile){
@@ -27,7 +37,6 @@ class grid{
     var quadrantXMax = quadrantX + 3;
     var quadrantYMax = quadrantY + 3;
 
-    
     for (var i = quadrantX; i < quadrantXMax; i++)
       for (var j = quadrantY; j < quadrantYMax; j++)
         tempArr.push(this.cells[i][j]);                 //3x3 sector
@@ -104,17 +113,20 @@ class grid{
     
   }
 
-  //recursive function
-  //backup if there are no valid options
-  //finsish successfully if there are avalid options and no remaining cells to mark
-  //continue if there are valid options and remaining cells to mark
+  // recursive function
+  // backup if there are no valid options
+  // finsish successfully if there are avalid options and no remaining cells to mark
+  // continue if there are valid options and remaining cells to mark
   createBoard(currentPos, completed){
     var tempNeighbours;
     var posX = Math.floor(currentPos / 9);
     var posY = currentPos % 9;
 
+    /*
+    if (this.cells[posX][posY].getPermanent() == false){
+    }*/
+    
     this.cells[posX][posY].setVal(0); 
-
     tempNeighbours = this.getRelevantNeighbours(this.cells[posX][posY]);
 
     var availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -133,9 +145,9 @@ class grid{
     //let difference2 = availableNumbers.filter((x) => !tempb.includes(x));
 
     console.log(difference);
-
     */
-    //diff function with tempneighbours and available numbers should be used here
+
+    // diff function with tempneighbours and available numbers should be used here
     for (var l = availableNumbers.length; l >= 0; l--){
       for (var k = 0; k < tempNeighbours.length; k++){
         if (tempNeighbours[k].getCellVal() == availableNumbers[l]) 
@@ -143,16 +155,17 @@ class grid{
       }
     }
 
-
-    //diff function with result with previouscell valls should be used here
+    // diff function with result with previouscell valls should be used here
     for (var l = availableNumbers.length; l >= 0; l--){
       for (var k = 0; k < this.cells[posX][posY].previousCellVals.length; k++){
-        if (this.cells[posX][posY].previousCellVals[k] == availableNumbers[l]) 
+        if (this.cells[posX][posY].previousCellVals[k] == availableNumbers[l]) {
           availableNumbers.splice(l, 1);
+        }
       }
     }
 
     console.log(currentPos);
+
     if (availableNumbers.length == 0 && currentPos <= 78){
       this.cells[posX][posY].clearPreviousCells();
       return this.createBoard(currentPos - 1, completed);
@@ -160,12 +173,12 @@ class grid{
     
     var numpos = (Math.floor(Math.random() * availableNumbers.length));
 
-    //if there are no positions left after this then we go back a cell, clear this cells previous
+    // if there are no positions left after this then we go back a cell, clear this cells previous
     this.cells[posX][posY].setVal(availableNumbers[numpos]); 
     this.cells[posX][posY].addPeviousCell();
 
 
-    //board complete therefore exit loop condition
+    // board complete therefore exit loop condition
     if (currentPos == 80){
       return true;
     }
@@ -296,6 +309,8 @@ class grid{
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
     }
+
+    console.log(array);
 
     return array;
   }
