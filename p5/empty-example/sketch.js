@@ -4,7 +4,7 @@
 var soduku = new grid();
 soduku.createBoard(0, false);
 
-generateIncompleteGrid(soduku);
+//generateIncompleteGrid(soduku);
 
 
 
@@ -168,6 +168,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
   btn = document.getElementById("somebutton");
   btnEasy = document.getElementById("somebuttonEasy");
+  btnDark = document.getElementById("dark-button");
+  btnSolve = document.getElementById("solve-grid-button");
+
+  btnDark.onclick = function setup(){
+    /*
+    console.log("Dark clicked");
+    soduku.setDarkMode(!soduku.getDarkMode());*/
+  }
+
+  btnSolve.onclick = function setup(){
+    soduku.solveGrid();
+  }
 
   btn.onclick = function setup() {
     soduku.clear();

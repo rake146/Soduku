@@ -164,7 +164,7 @@ class grid{
       }
     }
 
-    console.log(currentPos);
+    //console.log(currentPos);
 
     if (availableNumbers.length == 0 && currentPos <= 78){
       this.cells[posX][posY].clearPreviousCells();
@@ -185,6 +185,10 @@ class grid{
     else{
       return soduku.createBoard(currentPos + 1, completed);
     }
+  }
+
+  solveGrid(){
+    console.log("GRID SOLVED");
   }
 
   copyGridState(copiedGrid){
@@ -257,6 +261,7 @@ class grid{
           this.cells[i][j].hovered = false;
           this.cells[i][j].correlated = false;
           this.cells[i][j].clearPreviousCells();
+          this.cells[i][j].setPermanent(false);
         }
   }
   clearSubProperties(){
