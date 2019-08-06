@@ -172,9 +172,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   btnSolve = document.getElementById("solve-grid-button");
 
   btnDark.onclick = function setup(){
-    /*
     console.log("Dark clicked");
-    soduku.setDarkMode(!soduku.getDarkMode());*/
+    soduku.setDarkMode(!soduku.getDarkMode());
   }
 
   btnSolve.onclick = function setup(){
