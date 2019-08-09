@@ -4,6 +4,8 @@
 var soduku = new grid();
 soduku.createBoard(0, false);
 
+var completeSoduku = new grid();
+
 //generateIncompleteGrid(soduku);
 
 
@@ -34,6 +36,8 @@ function generateIncompleteGrid(soduku){
 
   for (var i = 0; i < randomlyAssortedCellList.length; i++)
   {
+      if (i == 0){ completeSoduku.copyGridState(soduku); console.log(completeSoduku);}
+
       soduku2 = new grid();
       soduku2.copyGridState(soduku);
       soduku2.removeUnwantedCell(randomlyAssortedCellList[i].getCellPosX(), randomlyAssortedCellList[i].getCellPosY());
@@ -178,6 +182,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   btnSolve.onclick = function setup(){
     soduku.solveGrid();
+    //soduku = completeSoduku;
+    soduku.copyGridState(completeSoduku);
   }
 
   btn.onclick = function setup() {

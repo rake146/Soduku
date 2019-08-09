@@ -189,6 +189,7 @@ class grid{
 
   solveGrid(){
     console.log("GRID SOLVED");
+    soduku.createBoard(0, false);
   }
 
   copyGridState(copiedGrid){
