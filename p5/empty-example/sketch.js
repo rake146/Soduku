@@ -48,6 +48,7 @@ function generateIncompleteGrid(soduku){
         soduku.removeUnwantedCell(randomlyAssortedCellList[i].getCellPosX(), randomlyAssortedCellList[i].getCellPosY());
   }
 
+  // set the permanent cells to true to highlight in UI
   for (var i = 0; i < 9; i++){
     for (var j = 0; j < 9; j++){
       if (soduku.cells[i][j].getCellVal() != 0){
@@ -57,20 +58,19 @@ function generateIncompleteGrid(soduku){
         soduku.cells[i][j].setPermanent(false);
       }
     }
-}
+  }
 
 }
 
 function clone(obj){
-
   if (null == obj || "object" != typeof obj) return obj;
   var copy = new grid();
   for (var attr in obj) {
       if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
   }
   return copy;
-
 }
+
 function mouseChecking(){
 
   var temporaryBoundingArray = new Array();
@@ -80,7 +80,7 @@ function mouseChecking(){
     awaitingInput = false;
   } 
 
-  if (awaitingInput == false){
+  if (awaitingInput == false && gridFailed == false){
     soduku.clearFocus();
     for (var i = 0; i < 9; i++){
       for (var j = 0; j < 9; j++){
@@ -121,7 +121,7 @@ function keyPressed(){
       console.log(getFailedState());
 
       if (getFailedState() == true){
-        //soduku.cells[inputX][inputY].setInvalidNumber(true);
+        soduku.cells[inputX][inputY].setInvalidNumber(true);
         gridFailed = true;
         console.log("YOUVE FAILED!");
       } else {
@@ -136,9 +136,7 @@ function keyPressed(){
 }
 
 function getFailedState(){
-  if (soduku.cells[inputX][inputY].getCellVal() != completeSoduku.cells[inputX][inputY].getCellVal()){ return true; }
-  
-  return false;
+  return soduku.cells[inputX][inputY].getCellVal() != completeSoduku.cells[inputX][inputY].getCellVal();
 }
 
 function valueChecking(){
@@ -147,12 +145,15 @@ function valueChecking(){
   for (var i = 0; i < 9; i++){
     for (var j = 0; j < 9; j++){
       if (soduku.cells[i][j].getCellVal() != 0){
+        /*
         if (soduku.cells[i][j].getPermanent() == true){
           textSize(24);
         }
         else{
           textSize(18);
         }
+        */
+        textSize(18);
         text(soduku.cells[i][j].getCellVal(), 50 + 20 + soduku.cells[i][j].getCellPosX() * 40, 50 + 20 + soduku.cells[i][j].getCellPosY() * 40);
       }
     }
@@ -221,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   else { gridStatus.innerHTML = "IN PLAY"; }
 
   btnDark.onclick = function setup(){
-    console.log("Dark clicked");
+    console.log("Dark clicked", !soduku.getDarkMode());
     soduku.setDarkMode(!soduku.getDarkMode());
   }
 
@@ -236,11 +237,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   btn.onclick = function setup() {
     soduku.clear();
+    gridFailed = false;
     soduku.createBoard(0, false);
   }
 
   btnEasy.onclick = function setup(){
     soduku.clear();
+    gridFailed = false;
     soduku.createBoard(0, false);
 
     generateIncompleteGrid(soduku);

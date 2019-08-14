@@ -56,14 +56,17 @@ class cell{
     }
     drawSquare(darkMode){
       strokeWeight(1);
-      if (this.hovered == true)
+      
+      if (this.invalidNumber == true){
+        fill(color('rgba(244, 255, 255, 0.4)'));
+        console.log("INVALID NUMBER COLOR TRIGGER");
+      }
+      else if (this.hovered == true)
         fill(color('rgba(140, 176, 234, 0.9)'));
       else if (this.correlated == true)
         fill(color('rgba(80, 180, 225, 0.4)'));
       else if (this.focused == true)
         fill(color('rgba(244, 66, 80, 0.4)'));
-      else if (this.invalidNumber == true)
-        fill(color('rgba(244, 0, 0, 0.4)'));
       else{
         if (darkMode == true){
           fill(color(44,44,44));

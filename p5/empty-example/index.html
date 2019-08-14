@@ -61,16 +61,16 @@
   document.getElementById("dark-button").addEventListener("click", function(){
     if (document.getElementById("dark-button").classList.contains("btn-dark")){
       document.getElementById("dark-button").classList.add("btn-light");
-      document.getElementsByTagName("body")[0].classList.remove("bg-color-dark");
-      document.getElementById("title").classList.remove("title-color-dark");
+      document.getElementsByTagName("body")[0].classList.add("bg-color-dark");
+      document.getElementById("title").classList.add("title-color-dark");
       document.getElementById("dark-button").innerHTML = "Light Mode";
       document.getElementById("dark-button").classList.remove("btn-dark");
     }
     else{
       document.getElementById("dark-button").classList.add("btn-dark");
-      document.getElementsByTagName("body")[0].classList.add("bg-color-dark");
-      document.getElementById("title").classList.add("title-color-dark");
-      document.getElementById("dark-button").innerHTML = "Dark Mode";
+      document.getElementsByTagName("body")[0].classList.remove("bg-color-dark");
+      document.getElementById("title").classList.remove("title-color-dark");
+      document.getElementById("dark-button").innerHTML = "Light Mode";
       document.getElementById("dark-button").classList.remove("btn-light");
     }
   });

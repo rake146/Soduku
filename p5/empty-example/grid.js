@@ -8,7 +8,7 @@ class grid{
       for (var j = 0; j < 9; j++)
         this.cells[i][j] = new cell(i, j);
 
-    this.darkMode = true;
+    this.darkMode = false;
   }
 
   getDarkMode(){
@@ -263,6 +263,7 @@ class grid{
           this.cells[i][j].correlated = false;
           this.cells[i][j].clearPreviousCells();
           this.cells[i][j].setPermanent(false);
+          this.cells[i][j].setInvalidNumber(false);
         }
   }
   clearSubProperties(){
