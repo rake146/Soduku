@@ -320,5 +320,15 @@ class grid{
 
     return array;
   }
+  returnGridCompleted(){
+    for(var i = 0; i < 9; i++){
+      for (var j = 0; j < 9; j++){
+        if (this.cells[i][j].getCellVal() == 0){
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
 }

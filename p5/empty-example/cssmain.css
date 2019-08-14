@@ -39,3 +39,11 @@ body {
     margin-right: 20px;
     position: absolute;
 }
+
+.grid-status{
+    left: 0;
+    top: 0;
+    position: absolute;
+    margin-left: 20px;
+    margin-top: 20px;
+}

@@ -4,12 +4,15 @@
 var soduku = new grid();
 soduku.createBoard(0, false);
 
+var awaitingInput = false;
+var inputX = 0;
+var inputY = 0;
+var gridFailed = false;
+var gridCompleted = false;
+
 var completeSoduku = new grid();
 
 //generateIncompleteGrid(soduku);
-
-
-
 
 function setup() {
   // put setup code here
@@ -71,33 +74,71 @@ function clone(obj){
 function mouseChecking(){
 
   var temporaryBoundingArray = new Array();
-  soduku.clearFocus();
-  for (var i = 0; i < 9; i++){
-    for (var j = 0; j < 9; j++){
-      if (soduku.cells[i][j].isInBounds(mouseX, mouseY) == true){
-        soduku.cells[i][j].setHovered(true);
 
-        temporaryBoundingArray = soduku.getRelevantNeighbours(soduku.cells[i][j]);
+  // if we leave the bounding square
+  if (soduku.cells[inputX][inputY].isInBounds(mouseX, mouseY) != true && awaitingInput == true){
+    awaitingInput = false;
+  } 
 
-        for (var k = 0; k < temporaryBoundingArray.length; k++)
-          temporaryBoundingArray[k].setCorrelated(true);
-
-        if (mouseIsPressed)
-        {
-          soduku.cells[i][j].setFocused(true);
-          soduku.cells[i][j].incrementVal();
+  if (awaitingInput == false){
+    soduku.clearFocus();
+    for (var i = 0; i < 9; i++){
+      for (var j = 0; j < 9; j++){
+        if (soduku.cells[i][j].isInBounds(mouseX, mouseY) == true){
+          soduku.cells[i][j].setHovered(true);
+  
+          temporaryBoundingArray = soduku.getRelevantNeighbours(soduku.cells[i][j]);
+  
+          for (var k = 0; k < temporaryBoundingArray.length; k++)
+            temporaryBoundingArray[k].setCorrelated(true);
+  
+          if (mouseIsPressed && soduku.cells[i][j].getCellVal() == 0)
+          {
+            soduku.cells[i][j].setFocused(true);
+            awaitingInput = true;
+            inputX = i;
+            inputY = j;
+            //soduku.cells[i][j].incrementVal();
+          }
+        }
+        else{
+          soduku.cells[i][j].setHovered(false);
+          soduku.cells[i][j].setFocused(false);
         }
       }
-      else{
-        soduku.cells[i][j].setHovered(false);
-        soduku.cells[i][j].setFocused(false);
-      }
-        
-      
-      //soduku.getRelevantNeighbours(soduku.cells[i][j]);
     }
   }
   
+}
+
+function keyPressed(){
+  if (awaitingInput == true){
+    if (keyCode >= 49 && keyCode <= 58){
+      console.log("Input registered");
+      soduku.cells[inputX][inputY].setVal(key);
+      awaitingInput = false;
+
+      console.log(getFailedState());
+
+      if (getFailedState() == true){
+        //soduku.cells[inputX][inputY].setInvalidNumber(true);
+        gridFailed = true;
+        console.log("YOUVE FAILED!");
+      } else {
+        console.log("SUCESSFUL INPUT!");
+      }
+
+      inputX = 0;
+      inputY = 0;
+
+    }
+  }
+}
+
+function getFailedState(){
+  if (soduku.cells[inputX][inputY].getCellVal() != completeSoduku.cells[inputX][inputY].getCellVal()){ return true; }
+  
+  return false;
 }
 
 function valueChecking(){
@@ -138,7 +179,6 @@ function drawGrid() {
     fill(color(0,0,0));
   }
 
-  //fill(color(0,0,0))
   for (var i = 0; i < maxRows + 1; i++){
 
     if (i == 0 || i == maxRows){  // outline for grid
@@ -154,7 +194,6 @@ function drawGrid() {
 
     line(50, 50 + i * 40, 50 + 40 * maxRows, 50 + i * 40);
     line(50 + i * 40, 50, 50 + i * 40, 50 + 40 * maxRows);
-    
   }
 
   strokeWeight(0);
@@ -174,6 +213,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   btnEasy = document.getElementById("somebuttonEasy");
   btnDark = document.getElementById("dark-button");
   btnSolve = document.getElementById("solve-grid-button");
+  gridStatus = document.getElementById("grid-status");
+
+  console.log(gridFailed);
+
+  if (gridFailed == true){ gridStatus.innerHTML = "FAILED"; }
+  else { gridStatus.innerHTML = "IN PLAY"; }
 
   btnDark.onclick = function setup(){
     console.log("Dark clicked");
@@ -181,9 +226,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   btnSolve.onclick = function setup(){
-    soduku.solveGrid();
-    //soduku = completeSoduku;
-    soduku.copyGridState(completeSoduku);
+    if (soduku.returnGridCompleted() == false){
+      soduku.copyGridState(completeSoduku);
+      console.log("grid state copied");
+    } else{
+      console.log("grid complete!");
+    }
   }
 
   btn.onclick = function setup() {

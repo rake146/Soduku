@@ -15,6 +15,7 @@ class cell{
       this.previousCellVals = [];
       this.permanent = false;
       this.focused = false;
+      this.invalidNumber = false;
     }
     clearPreviousCells(){
       this.previousCellVals = [];
@@ -50,6 +51,9 @@ class cell{
     setVal(value){
       this.val = value;
     }
+    setInvalidNumber(value){
+      this.invalidNumber = value;
+    }
     drawSquare(darkMode){
       strokeWeight(1);
       if (this.hovered == true)
@@ -58,6 +62,8 @@ class cell{
         fill(color('rgba(80, 180, 225, 0.4)'));
       else if (this.focused == true)
         fill(color('rgba(244, 66, 80, 0.4)'));
+      else if (this.invalidNumber == true)
+        fill(color('rgba(244, 0, 0, 0.4)'));
       else{
         if (darkMode == true){
           fill(color(44,44,44));
