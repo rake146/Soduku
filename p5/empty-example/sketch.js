@@ -16,8 +16,9 @@ var completeSoduku = new grid();
 
 function setup() {
   // put setup code here
-  createCanvas(500, 500);
-
+  var canvas = createCanvas(500, 500);
+  //console.log(canvas);
+  //canvas.parent('soduku-grid');
 }
 
 function draw() {
@@ -228,6 +229,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   btnSolve.onclick = function setup(){
     if (soduku.returnGridCompleted() == false){
+      clear();
+      gridFailed = false;
       soduku.copyGridState(completeSoduku);
       console.log("grid state copied");
     } else{

@@ -47,3 +47,11 @@ body {
     margin-left: 20px;
     margin-top: 20px;
 }
+
+.soduku-grid{
+    display: inline-block;
+}
+/* Styling can be added by default using the defaultCanvas0 tag
+#defaultCanvas0{
+    margin-left: 100px;
+}*/
