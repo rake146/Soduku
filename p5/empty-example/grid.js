@@ -1,5 +1,8 @@
 class grid{
   constructor(){
+    this.gridSize = 9;
+    this.darkMode = false;
+
     this.cells = new Array(9);
     for (var i = 0; i < 9; i++)
       this.cells[i] = new Array(9);
@@ -8,7 +11,10 @@ class grid{
       for (var j = 0; j < 9; j++)
         this.cells[i][j] = new cell(i, j);
 
-    this.darkMode = false;
+  }
+
+  getCells(i, j){
+    return this.cells[i][j];
   }
 
   getDarkMode(){
@@ -121,10 +127,6 @@ class grid{
     var tempNeighbours;
     var posX = Math.floor(currentPos / 9);
     var posY = currentPos % 9;
-
-    /*
-    if (this.cells[posX][posY].getPermanent() == false){
-    }*/
     
     this.cells[posX][posY].setVal(0); 
     tempNeighbours = this.getRelevantNeighbours(this.cells[posX][posY]);
@@ -163,8 +165,6 @@ class grid{
         }
       }
     }
-
-    //console.log(currentPos);
 
     if (availableNumbers.length == 0 && currentPos <= 78){
       this.cells[posX][posY].clearPreviousCells();
@@ -275,17 +275,6 @@ class grid{
           
         }
   }
-  /*
-  removeRandomCell(){
-      var randX = (Math.floor(Math.random() * 9));
-      var randY = (Math.floor(Math.random() * 9));
-
-      this.cells[randX][randY].setVal(0);
-      this.cells[randX][randY].hovered = false;
-      this.cells[randX][randY].correlated = false;
-      this.cells[randX][randY].clearPreviousCells();
-  }*/
-  
   removeUnwantedCell(i, j){
       this.cells[i][j].setVal(0);
       this.cells[i][j].hovered = false;

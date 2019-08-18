@@ -39,11 +39,7 @@ class cell{
       return this.focused;
     }
     isInBounds(mouseXCoord, mouseYCoord){
-      if (mouseXCoord >= this.lowerBoundsX && mouseXCoord <= this.higherBoundsX &&
-      mouseYCoord >= this.lowerBoundsY && mouseYCoord <= this.higherBoundsY)
-      {
-        return true;
-      }
+      return(mouseXCoord >= this.lowerBoundsX && mouseXCoord <= this.higherBoundsX && mouseYCoord >= this.lowerBoundsY && mouseYCoord <= this.higherBoundsY)
     }
     incrementVal(){
       this.val++;
@@ -57,10 +53,8 @@ class cell{
     drawSquare(darkMode){
       strokeWeight(1);
       
-      if (this.invalidNumber == true){
+      if (this.invalidNumber == true)
         fill(color('rgba(244, 255, 255, 0.4)'));
-        console.log("INVALID NUMBER COLOR TRIGGER");
-      }
       else if (this.hovered == true)
         fill(color('rgba(140, 176, 234, 0.9)'));
       else if (this.correlated == true)
@@ -68,11 +62,10 @@ class cell{
       else if (this.focused == true)
         fill(color('rgba(244, 66, 80, 0.4)'));
       else{
-        if (darkMode == true){
+        if (darkMode == true)
           fill(color(44,44,44));
-        }else{
+        else
           fill(color(255,255,255));
-        }
       }
   
       rect(50 + this.positionX * 40, 50 + this.positionY * 40, 40, 40);
