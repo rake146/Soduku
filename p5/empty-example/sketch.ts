@@ -186,11 +186,11 @@ document.getElementsByTagName('head')[0].appendChild(script);
 
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
-  btnGenerate = document.getElementById("generate-grid-button");
-  btnEasy = document.getElementById("somebuttonEasy");
-  btnDark = document.getElementById("dark-button");
-  btnSolve = document.getElementById("solve-grid-button");
-  gridStatus = document.getElementById("grid-status");
+  const btnGenerate = document.getElementById("generate-grid-button");
+  const btnEasy = document.getElementById("somebuttonEasy");
+  const btnDark = document.getElementById("dark-button");
+  const btnSolve = document.getElementById("solve-grid-button");
+  const gridStatus = document.getElementById("grid-status");
 
   btnDark.onclick = function setup(){
     console.log("Dark clicked", !soduku.getDarkMode());
