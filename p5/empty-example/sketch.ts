@@ -21,7 +21,7 @@ function setup() {
 
 function draw() {
   // tracking gridFailed & updating html
-  if (gridFailed == true){ gridStatus.innerHTML = "GAME OVER"; }
+  if (gridFailed){ gridStatus.innerHTML = "GAME OVER"; }
   else { gridStatus.innerHTML = "IN PLAY"; }
 
   clear();
@@ -39,14 +39,13 @@ function generateIncompleteGrid(soduku){
   // if solvable is true on copy
   // remove it on main
 
-  for (var i = 0; i < randomlyAssortedCellList.length; i++)
-  {
+  for (var i = 0; i < randomlyAssortedCellList.length; i++) {
       if (i == 0){ completeSoduku.copyGridState(soduku); }
 
       soduku2 = new grid();
       soduku2.copyGridState(soduku);
       soduku2.removeUnwantedCell(randomlyAssortedCellList[i].getCellPosX(), randomlyAssortedCellList[i].getCellPosY());
-      if (soduku2.isGridStateSolvable() == true)
+      if (soduku2.isGridStateSolvable())
         soduku.removeUnwantedCell(randomlyAssortedCellList[i].getCellPosX(), randomlyAssortedCellList[i].getCellPosY());
   }
 
@@ -56,7 +55,6 @@ function generateIncompleteGrid(soduku){
       soduku.getCells(i, j).setPermanent(soduku.getCells(i, j).getCellVal() != 0);
     }
   }
-
 }
 
 function clone(obj){
@@ -73,13 +71,13 @@ function mouseChecking(){
   var temporaryBoundingArray = new Array();
 
   // if we leave the bounding square
-  if (soduku.getCells(inputX, inputY).isInBounds(mouseX, mouseY) != true && awaitingInput == true){ awaitingInput = false; } 
+  if (!soduku.getCells(inputX, inputY).isInBounds(mouseX, mouseY) && awaitingInput){ awaitingInput = false; } 
 
-  if (awaitingInput == false && gridFailed == false){
+  if (!awaitingInput && !gridFailed) {
     soduku.clearFocus();
     for (var i = 0; i < 9; i++){
       for (var j = 0; j < 9; j++){
-        if (soduku.getCells(i, j).isInBounds(mouseX, mouseY) == true){
+        if (soduku.getCells(i, j).isInBounds(mouseX, mouseY)) {
           soduku.getCells(i, j).setHovered(true);
   
           temporaryBoundingArray = soduku.getRelevantNeighbours(soduku.getCells(i, j));
@@ -104,14 +102,14 @@ function mouseChecking(){
   
 }
 
-function keyPressed(){
-  if (awaitingInput == true){
-    if (keyCode >= 49 && keyCode <= 58){
+function keyPressed() {
+  if (awaitingInput){
+    if (keyCode >= 49 && keyCode <= 58) {
       console.log("Input registered");
       soduku.getCells(inputX, inputY).setVal(key);
       awaitingInput = false;
 
-      if (getFailedState() == true){
+      if (getFailedState()){
         soduku.getCells(inputX, inputY).setInvalidNumber(true);
         gridFailed = true;
         console.log("YOUVE FAILED!");
@@ -121,16 +119,15 @@ function keyPressed(){
 
       inputX = 0;
       inputY = 0;
-
     }
   }
 }
 
-function getFailedState(){
+function getFailedState() {
   return soduku.getCells(inputX, inputY).getCellVal() != completeSoduku.getCells(inputX, inputY).getCellVal();
 }
 
-function valueChecking(){
+function valueChecking() {
   textSize(18);
   textAlign(CENTER, CENTER);
   for (var i = 0; i < 9; i++){
@@ -152,7 +149,7 @@ function drawGrid() {
     }
   }
 
-  if (soduku.getDarkMode() == true){
+  if (soduku.getDarkMode()){
     fill(color(255,255,255));
     //maybe remove this later?
     stroke(214, 214, 214);
@@ -201,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   btnSolve.onclick = function setup(){
-    if (soduku.returnGridCompleted() == false){
+    if (!soduku.returnGridCompleted()){
       clear();
       gridFailed = false;
       soduku.copyGridState(completeSoduku);

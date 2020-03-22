@@ -320,5 +320,4 @@ class grid{
     }
     return true;
   }
-
 }
